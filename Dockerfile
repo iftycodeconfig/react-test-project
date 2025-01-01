@@ -2,7 +2,7 @@
 FROM node:18
 
 # Set the working directory inside the container
-WORKDIR /src
+WORKDIR /app
 
 # Copy package.json and package-lock.json for dependency installation
 COPY package*.json ./
@@ -16,8 +16,11 @@ COPY . .
 # Build the React application
 RUN npm run build
 
-# Expose the port Vite's preview server will run on
+# Use a lightweight server to serve the build (e.g., Vite's preview or `serve`)
+RUN npm install -g serve
+
+# Expose the port Vite's preview server or `serve` will use
 EXPOSE 4173
 
-# Command to start the Vite preview server
-CMD ["npm", "run", "preview"]
+# Start the server to serve the production build
+CMD ["serve", "-s", "dist", "-l", "4173"]
